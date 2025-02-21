@@ -62,7 +62,7 @@ export const validatePromoCode = async (
       }
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       code: promoCode.code,
       discountPercentage: promoCode.discountPercentage,
     });
