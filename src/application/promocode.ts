@@ -37,7 +37,7 @@ export const validatePromoCode = async (
     const { code } = req.body;
     const userId = req.auth.userId;
     if (!code) {
-      return res.status(400).json({ message: "Promo code is required" });
+      throw new ValidationError("Promo code is required");
     }
 
     const promoCode = await PromoCode.findOne({
@@ -47,7 +47,7 @@ export const validatePromoCode = async (
     });
 
     if (!promoCode) {
-      return res.status(404).json({ message: "Invalid or expired promo code" });
+      throw new ValidationError("Invalid or expired promo code");
     }
 
     // Check if this is a "first order only" promo code
@@ -58,9 +58,7 @@ export const validatePromoCode = async (
       });
 
       if (previousOrders > 0) {
-        return res.status(403).json({
-          message: "This promo code is for new customers only.",
-        });
+        throw new ValidationError("This promo code is for new customers only.");
       }
     }
 
