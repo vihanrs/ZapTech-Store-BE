@@ -50,14 +50,15 @@ app.use(globalErrorHandlingMiddleware);
 // connectDB();
 const PORT = process.env.PORT || 8001;
 connectDB().then(() => {
-  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 
-  // ✅ Self-ping to keep server awake on Render free tier
-  setInterval(() => {
-    fetch(`https://your-backend.onrender.com/ping`)
-      .then((res) => res.json())
-      .then((data) => console.log("Self Ping Success:", data))
-      .catch((err) => console.log("Self Ping Error:", err));
-  }, 600000); // Every 10 minutes
+    // Self-ping to keep server awake on Render free tier
+    setInterval(() => {
+      fetch(`https://fed-storefront-backend-vihan.onrender.com/ping`)
+        .then((res) => res.json())
+        .then((data) => console.log("Self Ping Success:", data))
+        .catch((err) => console.log("Self Ping Error:", err));
+    }, 600000); // Every 10 minutes
+  });
 });
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
