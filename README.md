@@ -80,6 +80,8 @@ POST   /api/v1/promocodes/validate // Validate promo code (Authenticated users)
 
 ## 🏗️ Project Structure
 
+![Capture](https://github.com/user-attachments/assets/fd1513b0-bfe5-4ccc-b449-9c316606b333)
+
 src/
 
 ├── api/ # Route definitions and controllers
@@ -101,6 +103,8 @@ Needed to implement secure role-based access while keeping the code maintainable
 
 **Solution:**
 ✅ Created middleware-based authentication using Clerk with custom authorization:
+
+![Capture](https://github.com/user-attachments/assets/119dc5f8-6cfe-4afe-8c1e-fc078d62831d)
 
 ```typescript
 // Separation of authentication and authorization concerns
