@@ -15,7 +15,7 @@ const app = express();
 
 const allowedOrigins = [
   "https://fed-storefront-frontend-vihan.netlify.app",
-  "http://localhost:3000", // for local testing
+  "http://localhost:5173", // for local testing
 ];
 
 app.use(
