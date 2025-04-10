@@ -23,25 +23,35 @@ export const createOrder = async (
       throw new ValidationError("Invalid order data");
     }
 
-    // Verify stock availability for all products
-    for (const item of result.data.items) {
-      const product = await Product.findById(item.product._id);
+    // Verify stock availability and attach stripePriceId
+    const itemsWithStripe = await Promise.all(
+      result.data.items.map(async (item) => {
+        const product = await Product.findById(item.product._id);
 
-      if (!product) {
-        throw new ValidationError(`Product ${item.product._id} not found`);
-      }
+        if (!product) {
+          throw new ValidationError(`Product ${item.product._id} not found`);
+        }
 
-      if (product.stockQuantity < item.quantity) {
-        throw new ValidationError(
-          `Insufficient stock for product ${product.name}. Available: ${product.stockQuantity}`
-        );
-      }
-    }
+        if (product.stockQuantity < item.quantity) {
+          throw new ValidationError(
+            `Insufficient stock for product ${product.name}. Available: ${product.stockQuantity}`
+          );
+        }
+
+        return {
+          ...item,
+          product: {
+            ...item.product,
+            stripePriceId: product.stripePriceId, // ✅ attach it here
+          },
+        };
+      })
+    );
 
     const userId = req.auth.userId;
 
     //calculate subTotal, discount, grandTotal
-    const subTotal = result.data.items.reduce(
+    const subTotal = itemsWithStripe.reduce(
       (acc, item) => acc + item.product.price * item.quantity,
       0
     );
@@ -83,7 +93,7 @@ export const createOrder = async (
     }
 
     // Update stock quantities
-    const stockUpdatePromises = result.data.items.map((item) =>
+    const stockUpdatePromises = itemsWithStripe.map((item) =>
       Product.findByIdAndUpdate(
         item.product._id,
         { $inc: { stockQuantity: -item.quantity } },
@@ -98,11 +108,11 @@ export const createOrder = async (
     });
 
     // Create order
-    await Order.create(
+    const order = await Order.create(
       [
         {
           userId,
-          items: result.data.items,
+          items: itemsWithStripe,
           addressId: address[0]._id,
           subTotal,
           discount,
@@ -114,7 +124,7 @@ export const createOrder = async (
 
     // Commit the transaction
     await session.commitTransaction();
-    res.status(201).send();
+    res.status(201).json({ orderId: order[0]._id });
   } catch (error) {
     await session.abortTransaction();
     next(error);

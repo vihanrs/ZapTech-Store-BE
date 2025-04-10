@@ -10,6 +10,8 @@ import { paymentsRouter } from "./api/payment";
 import { productRouter } from "./api/product";
 import { connectDB } from "./infrastructure/db";
 import promoCodeRouter from "./api/promocode";
+import { handleWebhook } from "./application/payment";
+import bodyParser from "body-parser";
 
 const app = express();
 
@@ -30,6 +32,13 @@ app.use(
     credentials: true,
   })
 );
+
+app.post(
+  "/api/stripe/webhook",
+  bodyParser.raw({ type: "application/json" }),
+  handleWebhook
+);
+
 app.use(express.json()); // For parsing JSON requests
 app.use(clerkMiddleware());
 // app.use(cors({ origin: "https://fed-storefront-frontend-vihan.netlify.app" }));
@@ -48,7 +57,7 @@ app.get("/ping", (req, res) => {
 app.use(globalErrorHandlingMiddleware);
 
 // connectDB();
-const PORT = process.env.PORT || 8001;
+const PORT = process.env.PORT || 8000;
 connectDB().then(() => {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

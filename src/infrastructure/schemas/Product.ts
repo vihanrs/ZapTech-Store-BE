@@ -18,6 +18,10 @@ const ProductSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  stripePriceId: {
+    type: String,
+    required: false,
+  },
   description: {
     type: String,
     required: true,
@@ -27,6 +31,11 @@ const ProductSchema = new mongoose.Schema({
     required: true,
     min: 0,
     default: 0,
+  },
+  isFeatured: {
+    type: Boolean,
+    required: false,
+    default: false,
   },
 });
 

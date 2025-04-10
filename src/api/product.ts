@@ -5,6 +5,7 @@ import {
   getProduct,
   deleteProduct,
   updateProduct,
+  getFeaturedProducts,
 } from "../application/product";
 import { isAuthenticated } from "./middleware/authentication-middleware";
 import { isAdmin } from "./middleware/authorization-middleware";
@@ -15,6 +16,7 @@ productRouter
   .route("/")
   .get(getProducts)
   .post(isAuthenticated, isAdmin, createProduct);
+productRouter.route("/featured").get(getFeaturedProducts);
 productRouter
   .route("/:id")
   .get(getProduct)
