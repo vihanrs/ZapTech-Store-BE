@@ -1,6 +1,6 @@
 /**
  *  `PRODUCT_TAGS` is a constant array of tag values used to label products
- *  (e.g., "featured", "new", etc.). We use `as const` to lock the values and
+ *  (e.g., "featured", "new", etc.). use `as const` to lock the values and
  *  tell TypeScript to treat them as exact string literals.
  */
 export const PRODUCT_TAGS = [

@@ -118,7 +118,7 @@ export const updateCategoryStatus = async (
       throw new ValidationError(`Invalid category status: ${errorMessage}`);
     }
     const id = req.params.id;
-    const { isActive } = result.data;
+    const { status: isActive } = result.data;
     const updatedCategory = await Category.findByIdAndUpdate(
       id,
       { isActive },

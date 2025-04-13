@@ -33,7 +33,7 @@ export const UpdatePromoCodeDTO = z.object({
 
 // validate query params
 export const UpdatePromoCodeStatusDTO = z.object({
-  isActive: z.enum(["true", "false"]).transform((val) => val === "true"),
+  status: z.enum(["true", "false"]).transform((val) => val === "true"),
   // Converts "true"/"false" (string from query) into a real boolean because need boolean value to update directly in the database
 });
 

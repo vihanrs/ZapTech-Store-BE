@@ -116,7 +116,7 @@ export const updatePromoCodeStatus = async (
     }
 
     const id = req.params.id;
-    const isActive = result.data.isActive;
+    const isActive = result.data.status;
 
     const updatedPromoCode = await PromoCode.findByIdAndUpdate(
       id,

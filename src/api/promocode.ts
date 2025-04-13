@@ -15,10 +15,13 @@ promoCodeRouter
   .route("/")
   .get(getPromoCodes) // get promocodes by status (?status=active/inactive)
   .post(isAuthenticated, isAdmin, createPromoCode);
+
 promoCodeRouter.route("/validate").get(isAuthenticated, validatePromoCode);
+
 promoCodeRouter.route("/:id").put(isAuthenticated, isAdmin, updatePromoCode);
+
 promoCodeRouter
   .route("/:id/status")
-  .put(isAuthenticated, isAdmin, updatePromoCodeStatus);
+  .put(isAuthenticated, isAdmin, updatePromoCodeStatus); // ?status=true/false
 
 export default promoCodeRouter;
