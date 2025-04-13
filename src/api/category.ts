@@ -1,10 +1,9 @@
 import express from "express";
 import {
-  createCategory,
-  deleteCategory,
   getCategories,
-  getCategory,
+  createCategory,
   updateCategory,
+  updateCategoryStatus,
 } from "../application/category";
 import { isAuthenticated } from "./middleware/authentication-middleware";
 import { isAdmin } from "./middleware/authorization-middleware";
@@ -13,10 +12,11 @@ export const categoryRouter = express.Router();
 
 categoryRouter
   .route("/")
-  .get(getCategories)
-  .post(isAuthenticated, isAdmin, createCategory); //Remove isAuthenticated and isAdmin for using with Postman
+  .get(getCategories) // get categories by status (?status=active/inactive)
+  .post(isAuthenticated, isAdmin, createCategory);
+
+categoryRouter.route("/:id").put(isAuthenticated, isAdmin, updateCategory);
+
 categoryRouter
-  .route("/:id")
-  .get(getCategory)
-  .delete(isAuthenticated, isAdmin, deleteCategory)
-  .patch(isAuthenticated, isAdmin, updateCategory);
+  .route("/:id/status")
+  .put(isAuthenticated, isAdmin, updateCategoryStatus); // ?status=true/false
