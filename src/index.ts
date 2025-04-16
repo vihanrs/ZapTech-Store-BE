@@ -3,8 +3,9 @@ import express from "express";
 import { clerkMiddleware } from "@clerk/express";
 import cors from "cors";
 import "dotenv/config";
-import { categoryRouter } from "./api/category";
 import globalErrorHandlingMiddleware from "./api/middleware/global-error-handling-middleware";
+import { productTagRouter } from "./api/productTags";
+import { categoryRouter } from "./api/category";
 import { orderRouter } from "./api/order";
 import { paymentsRouter } from "./api/payment";
 import { productRouter } from "./api/product";
@@ -43,6 +44,7 @@ app.use(express.json()); // For parsing JSON requests
 app.use(clerkMiddleware());
 // app.use(cors({ origin: "https://fed-storefront-frontend-vihan.netlify.app" }));
 
+app.use("/api/v1/product-tags", productTagRouter);
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/orders", orderRouter);
